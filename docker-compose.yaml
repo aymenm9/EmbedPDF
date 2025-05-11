@@ -1,0 +1,6 @@
+services:
+  g1_aymen_micro_projet:
+    image: g1_aymen_micro_projet
+    build: .
+    ports:
+      - 8000:8000
