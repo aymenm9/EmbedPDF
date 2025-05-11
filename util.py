@@ -32,7 +32,7 @@ async def create_embedded_pdf_func(main_pdf:UploadFile,files:List[UploadFile],de
     return StreamingResponse(
         output,
         media_type="application/pdf",
-        headers={"Content-Disposition": f"attachment; filename={main_pdf.filename}.pdf"}
+        headers={"Content-Disposition": f"attachment; filename={main_pdf.filename.split('.pdf')[0]}_embedded.pdf"}
         )
 
 async def extract_embedded_pdf_func(container_pdf:UploadFile)->StreamingResponse:
