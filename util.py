@@ -13,7 +13,12 @@ async def create_embedded_pdf_func(main_pdf:UploadFile,files:List[UploadFile],de
         for i,file in enumerate(files):
             file_data = await file.read()
             checksum = clc_checksum(file_data)
-            file_spec = pikepdf.AttachedFileSpec(pdf,file_data,mime_type=file.content_type)
+            if descriptions and len(descriptions) > i: 
+                description = descriptions[i]
+            else:
+                description = f'embedded file : {file.filename}'
+
+            file_spec = pikepdf.AttachedFileSpec(pdf,file_data,mime_type=file.content_type,description=description)
             pdf.attachments[file.filename] = file_spec
             if '/EF' in file_spec.obj and '/F' in file_spec.obj['/EF']:
                 embedded_file = file_spec.obj["/EF"]["/F"]
@@ -30,7 +35,7 @@ async def create_embedded_pdf_func(main_pdf:UploadFile,files:List[UploadFile],de
         headers={"Content-Disposition": f"attachment; filename={main_pdf.filename}.pdf"}
         )
 
-async def extract_embedded_pdf_func(container_pdf:UploadFile):
+async def extract_embedded_pdf_func(container_pdf:UploadFile)->StreamingResponse:
     pdf_content = await container_pdf.read()
     files = []
     zip_buffer = BytesIO()

@@ -23,6 +23,6 @@ async def create_embedded_pdf(
     return await create_embedded_pdf_func(container_pdf,files,descriptions)
 
 @app.post('/extract_embedded_pdf')
-async def extract_embedded_pdf(container_pdf:UploadFile = File(...)):
+async def extract_embedded_pdf(container_pdf:UploadFile = File(...))->StreamingResponse:
     return await extract_embedded_pdf_func(container_pdf)
 
